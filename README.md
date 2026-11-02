@@ -6,4 +6,11 @@ An AI-powered Discord bot built by the ACM AI group at Missouri S&T.
 Blah blah blah Test
 
 Built by the ACM AI group at Missouri S&T, Fall 2026.
-<!-- Add your name here in your first pull request! -->
+
+Mathias Abunaw 
+
+Major: Computer Science
+
+Class: 2029
+
+blah
