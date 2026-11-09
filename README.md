@@ -7,3 +7,4 @@ Blah blah blah Test
 
 Built by the ACM AI group at Missouri S&T, Fall 2026.
 Hayden, Computer Science, sending python email verification
+Oscar, Computer Science, Does a bot already do .edu verification?, What does a scam account look like?.
