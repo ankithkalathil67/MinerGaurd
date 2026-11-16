@@ -1,10 +1,11 @@
+import os
 import smtplib
 import random
 from email.message import EmailMessage
 
 #Email and app password from google, can change later on for better email address
 email = "acmaitest@gmail.com"
-password = "qmjf hqql xnww rusu"
+password = os.getenv("EMAIL_PASSWORD")
 
 #sends verification email and returns the verification code, takes student's username without domain
 def send_verification_email(to):
