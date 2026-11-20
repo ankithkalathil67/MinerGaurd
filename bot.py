@@ -21,7 +21,10 @@ import urllib.parse
 import urllib.request
 from datetime import date
 
+import email_verification
+
 import discord                              # the Discord library
+from discord import app_commands
 from dotenv import load_dotenv              # reads secrets from the .env file
 from langchain.agents import create_agent
 from langchain.tools import tool
@@ -91,12 +94,28 @@ intents = discord.Intents.default()
 intents.message_content = True     # needed to read message text
 intents.members = True             # needed later for the server guard (join events)
 client = discord.Client(intents=intents)
+tree = app_commands.CommandTree(client)  # for slash commands
 
 
 @client.event
 async def on_ready():
+    await tree.sync()  # register slash commands for this server
     print(f"MinerGuard is online as {client.user}")
 
+verification_codes = {}  # Dictionary to store verification codes for users
+@tree.command(name="verify", description="Verify you're an S&T student by entering your school username.")
+async def verify(interaction: discord.Interaction, username: str):
+    code = email_verification.send_verification_email(username)
+    verification_codes[interaction.user.id] = code  # Store the code for the user
+    await interaction.response.send_message(f"A verification code has been sent to {username}@mst.edu (check spam folder)", ephemeral=True)
+
+@tree.command(name="confirm", description="Enter the code from your verfication email")
+async def confirm(interaction: discord.Interaction, code: str):
+    if interaction.user.id in verification_codes and verification_codes[interaction.user.id] == code:
+        await interaction.response.send_message("Verification successful!", ephemeral=True)
+        del verification_codes[interaction.user.id]  # Remove the code after successful verification
+    else:
+        await interaction.response.send_message("Verification failed. Please check your code and try again.", ephemeral=True)
 
 @client.event
 async def on_message(message):
